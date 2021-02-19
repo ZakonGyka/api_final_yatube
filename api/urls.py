@@ -19,11 +19,11 @@ v1_router.register(r'v1/posts/(?P<post_id>\d+)/comments',
                    )
 v1_router.register(r'v1/group/',
                    GroupViewSet,
-                   basename='comments'
+                   basename='group'
                    )
 v1_router.register(r'v1/follow/',
                    FollowViewSet,
-                   basename='comments'
+                   basename='follow'
                    )
 
 urlpatterns = [
