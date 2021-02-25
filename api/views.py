@@ -1,9 +1,10 @@
 from rest_framework.permissions import IsAuthenticated
 
 from django.shortcuts import get_object_or_404
-from .models import Post, Comment
+from .models import Post, Comment, Group, Follow
 from .permissions import IsAuthorOrReadOnly
-from .serializers import PostSerializer, CommentSerializer
+from .serializers import PostSerializer, \
+    CommentSerializer, GroupSerializer, FollowSerializer
 from rest_framework import viewsets
 
 
@@ -29,11 +30,18 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Comment.objects.filter(post=post)
 
 
-class FollowViewSet(viewsets.ModelViewSet):
-    # TODO:  Напишите свой вариант
-    pass
-
-
 class GroupViewSet(viewsets.ModelViewSet):
-    # TODO:  Напишите свой вариант
-    pass
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    permission_classes = [IsAuthorOrReadOnly]
+    http_method_names = ('get', 'post')
+
+
+class FollowViewSet(viewsets.ModelViewSet):
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    http_method_names = ('get', 'post')
+
+    def get_queryset(self):
+        return Follow.objects.filter(author=self.request.user)

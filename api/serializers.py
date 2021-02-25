@@ -23,6 +23,13 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
 
 
+class GroupSerializer(serializers.ModelSerializer):
+    title = serializers.ReadOnlyField()
+    slug = serializers.SlugRelatedField(slug_field='username',
+                                        read_only=True
+                                        )
+
+
 class FollowSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(slug_field='username',
                                         read_only=True
