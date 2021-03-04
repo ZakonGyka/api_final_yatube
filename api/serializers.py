@@ -1,13 +1,11 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
-from .models import Comment, Post, Follow, User
+from .models import Comment, Post, Follow, User, Group
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(slug_field='username',
-                                          read_only=True
-                                          )
+    author = serializers.ReadOnlyField(source='author.username')
 
     class Meta:
         fields = ('id', 'text', 'author', 'pub_date')
@@ -16,7 +14,6 @@ class PostSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source='author.username')
-    post = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         fields = ('id', 'author', 'post', 'text', 'created')
@@ -24,27 +21,31 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    title = serializers.ReadOnlyField()
-    slug = serializers.SlugRelatedField(slug_field='username',
-                                        read_only=True
-                                        )
+    # title = serializers.ReadOnlyField()
+    # slug = serializers.SlugRelatedField(slug_field='username',
+    #                                     read_only=True
+    #                                     )
+    class Meta:
+        fields = '__all__'
+        model = Group
 
 
 class FollowSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(slug_field='username',
-                                        read_only=True
+                                        read_only=True,
+                                        default=serializers.CurrentUserDefault
                                         )
     author = serializers.SlugRelatedField(slug_field='username',
                                           read_only=True,
                                           queryset=User.objects.all()
                                           )
 
-    def validate(self, data):
-        if data['user'] == data['author']:
-            raise serializers.ValidationError(
-                'Нельзя подписаться на самого себя!!!'
-            )
-        return data
+    # def validate(self, data):
+    #     if data['user'] == data['author']:
+    #         raise serializers.ValidationError(
+    #             'Нельзя подписаться на самого себя!!!'
+    #         )
+    #     return data
 
     class Meta:
         fields = '__all__'
