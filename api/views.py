@@ -10,7 +10,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    # permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
     permission_classes = [IsAuthorOrReadOnly]
     filters_backends = [DjangoFilterBackend]
     filterSet_fields = ['group']
@@ -20,12 +19,10 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
-    # queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthorOrReadOnly]
 
     def perform_create(self, serializer):
-        # post = get_object_or_404(Post, id=self.kwargs.get('post_id'))
         serializer.save(author=self.request.user)
 
     def get_queryset(self):
@@ -37,14 +34,12 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = [IsAuthorOrReadOnly]
-    # http_method_names = ('get', 'post')
 
 
 class FollowViewSet(viewsets.ModelViewSet):
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     permission_classes = [IsAuthorOrReadOnly]
-    # http_method_names = ('get', 'post')
     filters_backends = [filters.SearchFilter]
     search_fields = ['=user__username', '=author__username', ]
 
@@ -53,5 +48,3 @@ class FollowViewSet(viewsets.ModelViewSet):
             serializer.save(user=self.request.user)
         else:
             serializer.errors
-    # def get_queryset(self):
-    #     return Follow.objects.filter(author=self.request.user)

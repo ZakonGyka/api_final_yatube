@@ -21,10 +21,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    # title = serializers.ReadOnlyField()
-    # slug = serializers.SlugRelatedField(slug_field='username',
-    #                                     read_only=True
-    #                                     )
     class Meta:
         fields = '__all__'
         model = Group
