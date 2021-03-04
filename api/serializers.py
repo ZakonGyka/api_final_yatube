@@ -8,7 +8,7 @@ class PostSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source='author.username')
 
     class Meta:
-        fields = ('id', 'text', 'author', 'pub_date')
+        fields = ('id', 'text', 'author', 'pub_date', 'group')
         model = Post
 
 
@@ -36,7 +36,6 @@ class FollowSerializer(serializers.ModelSerializer):
                                         default=serializers.CurrentUserDefault
                                         )
     author = serializers.SlugRelatedField(slug_field='username',
-                                          read_only=True,
                                           queryset=User.objects.all()
                                           )
 

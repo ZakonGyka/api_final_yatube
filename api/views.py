@@ -1,5 +1,3 @@
-from rest_framework.permissions import IsAuthenticated
-
 from django.shortcuts import get_object_or_404
 from .models import Post, Comment, Group, Follow
 from .permissions import IsAuthorOrReadOnly
@@ -15,7 +13,7 @@ class PostViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
     permission_classes = [IsAuthorOrReadOnly]
     filters_backends = [DjangoFilterBackend]
-    filterSet_fields = ['Group']
+    filterSet_fields = ['group']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
