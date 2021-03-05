@@ -5,6 +5,8 @@ from .serializers import PostSerializer, \
     CommentSerializer, GroupSerializer, FollowSerializer
 from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticated, \
+    IsAuthenticatedOrReadOnly
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -33,15 +35,15 @@ class CommentViewSet(viewsets.ModelViewSet):
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthorOrReadOnly, IsAuthenticatedOrReadOnly]
 
 
 class FollowViewSet(viewsets.ModelViewSet):
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthorOrReadOnly, IsAuthenticated]
     filters_backends = [filters.SearchFilter]
-    search_fields = ['=user__username', '=author__username', ]
+    search_fields = ['=user__username', '=following__username', ]
 
     def perform_create(self, serializer):
         if serializer.is_valid():
