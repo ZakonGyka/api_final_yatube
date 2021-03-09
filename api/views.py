@@ -39,11 +39,14 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class FollowViewSet(viewsets.ModelViewSet):
-    queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     permission_classes = [IsAuthorOrReadOnly, IsAuthenticated]
     filters_backends = [filters.SearchFilter]
     search_fields = ['=user__username', '=following__username', ]
+
+    def get_queryset(self):
+        post = get_object_or_404(Post, id=self.kwargs.get('post_id'))
+        return Follow.objects.filter(post=post)
 
     def perform_create(self, serializer):
         if serializer.is_valid():
