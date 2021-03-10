@@ -8,19 +8,19 @@ from rest_framework_simplejwt.views import (TokenObtainPairView,
 
 v1_router = DefaultRouter()
 
-v1_router.register(r'posts',
+v1_router.register(r'v1/posts',
                    PostViewSet,
                    basename='post'
                    )
-v1_router.register(r'posts/(?P<post_id>\d+)/comments',
+v1_router.register(r'v1/posts/(?P<post_id>\d+)/comments',
                    CommentViewSet,
                    basename='comments'
                    )
-v1_router.register(r'group',
+v1_router.register(r'v1/group',
                    GroupViewSet,
                    basename='group'
                    )
-v1_router.register(r'follow',
+v1_router.register(r'v1/follow',
                    FollowViewSet,
                    basename='follow'
                    )
