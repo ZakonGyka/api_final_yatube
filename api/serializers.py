@@ -1,7 +1,13 @@
+
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueTogetherValidator
 
-from .models import Comment, Post, Follow, User, Group
+from .models import Comment
+from .models import Follow
+from .models import Group
+from .models import Post
+from .models import User
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -29,11 +35,16 @@ class GroupSerializer(serializers.ModelSerializer):
 class FollowSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(slug_field='username',
                                         read_only=True,
-                                        default=serializers.CurrentUserDefault
+                                        default=serializers.CurrentUserDefault()
                                         )
     following = serializers.SlugRelatedField(slug_field='username',
                                              queryset=User.objects.all()
                                              )
+
+    def validate(self, attrs):
+        if attrs['following'] == self.context['request'].user:
+            raise ValidationError('Нельзя подписаться на самого себя!')
+        return attrs
 
     class Meta:
         fields = '__all__'
@@ -42,6 +53,6 @@ class FollowSerializer(serializers.ModelSerializer):
             UniqueTogetherValidator(
                 queryset=Follow.objects.all(),
                 fields=['user', 'following'],
-                message='Нельзя подписаться на самого себя!',
+                message='Повторная подписка запрещена!',
             )
         ]

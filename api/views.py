@@ -1,20 +1,26 @@
 from django.shortcuts import get_object_or_404
-from .models import Post, Comment, Group, Follow
-from .permissions import IsAuthorOrReadOnly
-from .serializers import PostSerializer, \
-    CommentSerializer, GroupSerializer, FollowSerializer
-from rest_framework import viewsets, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.permissions import IsAuthenticated, \
-    IsAuthenticatedOrReadOnly
+from rest_framework import filters
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+from .models import Comment
+from .models import Group
+from .models import Post
+from .permissions import IsAuthorOrReadOnly
+from .serializers import CommentSerializer
+from .serializers import FollowSerializer
+from .serializers import GroupSerializer
+from .serializers import PostSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthorOrReadOnly]
-    filters_backends = [DjangoFilterBackend]
-    filterSet_fields = ['group']
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['group']
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -39,14 +45,14 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class FollowViewSet(viewsets.ModelViewSet):
-    queryset = Follow.objects.all()
+    # queryset = Follow.objects.all()
     serializer_class = FollowSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    filters_backends = [filters.SearchFilter]
+    permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
     search_fields = ['=user__username', '=following__username', ]
 
+    def get_queryset(self):
+        return self.request.user.following.all()
+
     def perform_create(self, serializer):
-        if serializer.is_valid():
-            serializer.save(user=self.request.user)
-        else:
-            serializer.errors
+        serializer.save(user=self.request.user)
