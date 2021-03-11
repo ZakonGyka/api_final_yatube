@@ -1,4 +1,3 @@
-
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueTogetherValidator
@@ -33,13 +32,15 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(slug_field='username',
-                                        read_only=True,
-                                        default=serializers.CurrentUserDefault()
-                                        )
-    following = serializers.SlugRelatedField(slug_field='username',
-                                             queryset=User.objects.all()
-                                             )
+    user = serializers.SlugRelatedField(
+        slug_field='username',
+        read_only=True,
+        default=serializers.CurrentUserDefault()
+    )
+    following = serializers.SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all()
+    )
 
     def validate(self, attrs):
         if attrs['following'] == self.context['request'].user:
