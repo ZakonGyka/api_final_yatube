@@ -5,10 +5,10 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from .views import CommentViewSet
-from .views import FollowViewSet
-from .views import GroupViewSet
-from .views import PostViewSet
+from api.views import CommentViewSet
+from api.views import FollowViewSet
+from api.views import GroupViewSet
+from api.views import PostViewSet
 
 v1_router = DefaultRouter()
 

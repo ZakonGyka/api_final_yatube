@@ -5,14 +5,14 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import Comment
-from .models import Group
-from .models import Post
-from .permissions import IsAuthorOrReadOnly
-from .serializers import CommentSerializer
-from .serializers import FollowSerializer
-from .serializers import GroupSerializer
-from .serializers import PostSerializer
+from api.models import Comment
+from api.models import Group
+from api.models import Post
+from api.permissions import IsAuthorOrReadOnly
+from api.serializers import CommentSerializer
+from api.serializers import FollowSerializer
+from api.serializers import GroupSerializer
+from api.serializers import PostSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
