@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from rest_framework.validators import UniqueTogetherValidator
 
 User = get_user_model()
 
@@ -14,10 +15,10 @@ class Group(models.Model):
 class Post(models.Model):
     text = models.TextField()
     pub_date = models.DateTimeField(
-        "Дата публикации", auto_now_add=True
+        'Дата публикации', auto_now_add=True
     )
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="posts"
+        User, on_delete=models.CASCADE, related_name='posts'
     )
     group = models.ForeignKey(
         Group, on_delete=models.CASCADE, blank=True, null=True
@@ -31,16 +32,16 @@ class Comment(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="comments"
+        related_name='comments'
     )
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
-        related_name="comments"
+        related_name='comments'
     )
     text = models.TextField()
     created = models.DateTimeField(
-        "Дата добавления",
+        'Дата добавления',
         auto_now_add=True,
         db_index=True
     )
