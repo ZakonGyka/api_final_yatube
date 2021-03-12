@@ -42,6 +42,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = (IsAuthorOrReadOnly, IsAuthenticatedOrReadOnly)
+    http_method_names = ('get', 'post')
 
 
 class FollowViewSet(viewsets.ModelViewSet):
@@ -49,6 +50,7 @@ class FollowViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('=user__username', '=following__username', )
+    http_method_names = ('get', 'post')
 
     def get_queryset(self):
         return self.request.user.following.all()
