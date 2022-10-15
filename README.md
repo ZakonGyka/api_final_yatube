@@ -7,7 +7,7 @@ API для проекта Yatube позволяющая взаимодейств
 # Install
 1. Клонировать проект
 ```Python
-git clone https://github.com/ZakonGyka/api_yamdb.git
+git clone https://github.com/ZakonGyka/api_final_yatube.git
 ```
 2. Создать новое вертуальное окружение
 ```Python
@@ -22,7 +22,6 @@ pip install -r /path/to/requirements.txt
 pip manage.py runserver
 ```
 # Requirements
-+ django==3.0.5
-+ djangorestframework==3.11.0
++ django==4.1.2
++ djangorestframework==3.14.0
 + djangorestframework-simplejwt=5.2.1
-+ requests==2.23.0
